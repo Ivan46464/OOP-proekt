@@ -4,20 +4,10 @@ public class Book {
 
 
     private String author;
-
     private String title;
-
-
-
     private String genre;
-
     private String resume;
-
-
     private int realise_year;
-
-
-
     private ArrayList<String> key_words =new ArrayList<>();
 
     private double rating;
