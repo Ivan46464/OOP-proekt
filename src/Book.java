@@ -9,10 +9,9 @@ public class Book {
     private String resume;
     private int realise_year;
     private ArrayList<String> key_words =new ArrayList<>();
-
     private double rating;
     private String unique_number;
-    public Book(String author, String title, String genre, String resume, int realise_year, ArrayList<String> key_words,double rating, String unique_number){
+    public Book(String title, String author, String genre, String resume, int realise_year, ArrayList<String> key_words,double rating, String unique_number){
         setAuthor(author);
         setTitle(title);
         setGenre(genre);
