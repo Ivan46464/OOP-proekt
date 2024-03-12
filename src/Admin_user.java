@@ -85,15 +85,20 @@ public class Admin_user extends User {
             System.out.println("Title: " + book.getTitle());
         }
     }
-    public void book_find(ArrayList<Book> books){
+    public void book_find(ArrayList<Book> books) {
         System.out.println("Write the unique number of the book: ");
         String book_unique_number = getSc().nextLine();
         Book book_to_find = null;
-        for(Book book :books){
-           if (book.getUnique_number().equals(book_unique_number)){
-               book_to_find = book;
-           }
+        for (Book book : books) {
+            if (book.getUnique_number().equals(book_unique_number)) {
+                book_to_find = book;
+                break;
+            }
         }
-        System.out.println("Books title: " + book_to_find.getTitle());
+        if (book_to_find != null) {
+            System.out.println("Books title: " + book_to_find.getTitle());
+        } else {
+            System.out.println("Book with unique number '" + book_unique_number + "' not found.");
+        }
     }
 }
