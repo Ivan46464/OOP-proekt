@@ -1,0 +1,196 @@
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Scanner;
+
+public class Admin_user extends User implements Serializable {
+    private int id;
+    private static int last_id = 0;
+    public Admin_user(String username, String password, Boolean availability){
+        super(username, password, availability);
+        setId(++last_id);
+    }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    public void add_user(ArrayList<Normal_user> users, String username, String password){
+        Normal_user n = new Normal_user(username, password, false);
+        users.add(n);
+        System.out.println("Successfully added a user.");
+    }
+    public void user_remove(ArrayList<Normal_user> users, int user_id){
+        Iterator<Normal_user> iterator = users.iterator();
+        while (iterator.hasNext()) {
+            Normal_user user = iterator.next();
+            if (user.getId() == user_id) {
+                System.out.println("Username: " + user.getUsername());
+                System.out.println("Successfully removed a user.");
+                iterator.remove();
+            }
+        }
+
+    }
+    public void book_add(ArrayList<Book> books){
+        System.out.println("Write the title of the book: ");
+        String book_title = getSc().nextLine();
+        System.out.println("Write the author of the book: ");
+        String book_author = getSc().nextLine();
+        System.out.println("Write the genre of the book: ");
+        String book_genre = getSc().nextLine();
+        System.out.println("Write a short resume of the book: ");
+        String book_resume = getSc().nextLine();
+        System.out.println("Write the release year of the book: ");
+        String book_release_year_str = getSc().nextLine();
+        int book_release_year = Integer.parseInt(book_release_year_str);
+        System.out.println("Write key words of the book(separate them by comma): ");
+        String book_key_words = getSc().nextLine();
+        String[] keywordsArray = book_key_words.split(",");
+        ArrayList<String> book_keywords_List = new ArrayList<>();
+        for (String keyword : keywordsArray) {
+            String trimmedKeyword = keyword.trim();
+            book_keywords_List.add(trimmedKeyword);
+        }
+        System.out.println("Write the rating of the book: ");
+        String rating = getSc().nextLine();
+        double book_rating = Double.parseDouble(rating);
+        System.out.println("Write the unique number of the book: ");
+        String book_unique_number = getSc().nextLine();
+        Book book = new Book(book_title,book_author,book_genre,book_resume,book_release_year,book_keywords_List,book_rating,book_unique_number);
+        books.add(book);
+    }
+    public void book_remove(ArrayList<Book> books, String unique_number){
+        Iterator<Book> iterator = books.iterator();
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
+            if (book.getUnique_number().equals(unique_number)) {
+                iterator.remove(); // Remove the book using the iterator
+            }
+        }
+    }
+    public void book_view(ArrayList<Book> books){
+        if(!books.isEmpty()) {
+            for (Book book : books) {
+                System.out.println("Title: " + book.getTitle());
+            }
+        }
+        else{
+            System.out.println("There is no books in the library.");
+        }
+    }
+    public void book_find(ArrayList<Book> books, String tag ,String word) {
+        Book book_to_find = null;
+        for (Book book : books) {
+            if (book.getUnique_number().equals(word)) {
+                book_to_find = book;
+                break;
+            }
+            if (book.getTitle().equals(word)){
+                book_to_find=book;
+                break;
+            }
+            if (book.getAuthor().equals(word)){
+                book_to_find = book;
+                break;
+            }
+
+        }
+        if (book_to_find != null) {
+            System.out.println("Book's title: " + book_to_find.getTitle());
+            System.out.println("Book's author: " + book_to_find.getAuthor());
+            System.out.println("Book's unique number: "+ book_to_find.getUnique_number());
+        }
+        else {
+            System.out.println("Book with " + tag + " is not found.");
+        }
+    }
+    public void book_all(ArrayList<Book> books){
+        if (!books.isEmpty()){
+        for(Book book:books) {
+            System.out.println("Tittle: " + book.getTitle());
+            System.out.println("Author: " + book.getAuthor());
+            System.out.println("Genre: " + book.getGenre());
+            System.out.println("Unique number: " + book.getUnique_number());
+        }
+        }else{
+        System.out.println("There is no books in the library.");
+        }
+    }
+
+    public void book_info(ArrayList<Book> books, String unique_number){
+        Book book_info = null;
+        for(Book book:books){
+            if(book.getUnique_number().equals(unique_number)){
+                book_info=book;
+            }
+        }
+        if(book_info!=null){
+            System.out.println("Tittle: " + book_info.getTitle());
+            System.out.println("Author: " + book_info.getAuthor());
+            System.out.println("Genre: "+ book_info.getGenre());
+            System.out.println("Resume: " + book_info.getResume());
+            System.out.println("The release year is " + book_info.getRealise_year());
+            StringBuilder output = new StringBuilder();
+            for (int i = 0; i < book_info.getKey_words().size(); i++) {
+                output.append(book_info.getKey_words().get(i));
+                if (i < book_info.getKey_words().size() - 1) { // Add a comma if it's not the last element
+                    output.append(", ");
+                }
+            }
+            System.out.println("Key words: " + output);
+            System.out.println("Rating: " + book_info.getRating());
+            System.out.println("Unique number: " + book_info.getUnique_number());
+        }
+        else{
+            System.out.println("Book with this unique number is not found in our library.");
+        }
+    }
+    public void book_sort(ArrayList<Book> books, String tag, String order){
+        if(!books.isEmpty()) {
+            switch (tag.toLowerCase()) {
+                case "title":
+                    gnomeSortBooks(books, Comparator.comparing(book -> book.getTitle().toLowerCase()), order);
+                    break;
+                case "author":
+                    gnomeSortBooks(books, Comparator.comparing(book -> book.getAuthor().toLowerCase()), order);
+                    break;
+                case "year":
+                    gnomeSortBooks(books, Comparator.comparingInt(Book::getRealise_year), order);
+                    break;
+                case "rating":
+                    gnomeSortBooks(books, Comparator.comparingDouble(Book::getRating), order);
+                    break;
+                default:
+                    System.out.println("Invalid option: " + tag);
+                    return;
+            }
+            System.out.println("Sorted Books:");
+            for (Book book : books) {
+                System.out.println(book.getTitle() + ", " + book.getAuthor() + ", " + book.getRealise_year() + ", " + book.getRating());
+            }
+        }
+    }
+    private static void gnomeSortBooks(ArrayList<Book> books, Comparator<Book> comparator, String order) {
+        int index = 0;
+        while (index < books.size()) {
+            if (index == 0 || (order.equals("asc") && comparator.compare(books.get(index), books.get(index - 1)) >= 0)
+                    || (order.equals("desc") && comparator.compare(books.get(index), books.get(index - 1)) <= 0)) {
+                index++;
+            } else {
+                Book temp = books.get(index);
+                books.set(index, books.get(index - 1));
+                books.set(index - 1, temp);
+                index--;
+            }
+        }
+    }
+    public User logout(Non_user user){
+        User current_user;
+        current_user = (Non_user) user;
+        return current_user;
+    }
+}

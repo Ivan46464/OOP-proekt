@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Scanner;
 
-public abstract class User {
+public abstract class User implements Serializable {
 
 
     private String username;
@@ -8,12 +9,12 @@ public abstract class User {
 
     private Boolean availability;
 
-    private Scanner sc;
+    private transient Scanner sc;
     public  User(String username, String password, Boolean availability){
         setUsername(username);
         setPassword(password);
         setAvailability(availability);
-        Scanner sc = new Scanner(System.in);
+        sc = new Scanner(System.in);
     }
     public String getUsername() {
         return username;
